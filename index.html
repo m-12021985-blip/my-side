@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Cleaning Report</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:0;
+    background:#001f54;
+    font-family:Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.phone{
+    width:360px;
+    height:740px;
+    background:#001f54;
+    border-radius:25px;
+    overflow:hidden;
+    padding:20px;
+    box-sizing:border-box;
+    color:white;
+    text-align:center;
+}
+
+h1{
+    margin-top:40px;
+    font-size:30px;
+}
+
+.subtitle{
+    margin-top:10px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    margin-top:18px;
+    border:none;
+    border-radius:15px;
+    background:yellow;
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.card{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:20px;
+    margin-top:25px;
+}
+
+select,
+textarea{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border-radius:12px;
+    border:1px solid gray;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+.report-box{
+    background:#f2f2f2;
+    padding:15px;
+    border-radius:15px;
+    margin-top:20px;
+}
+
+.done-btn{
+    background:limegreen;
+    color:white;
+}
+
+#teacherPage,
+#cleanerPage{
+    display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="phone">
+
+<!-- HOME PAGE -->
+<div id="homePage">
+
+    <h1>Clean Alert</h1>
+
+    <p class="subtitle">
+        School Cleaning Reporting System
+    </p>
+
+    <button onclick="openTeacher()">
+        Teacher
+    </button>
+
+    <button onclick="openCleaner()">
+        Cleaner
+    </button>
+
+</div>
+
+<!-- TEACHER PAGE -->
+<div id="teacherPage">
+
+    <h1>Report Dirty Area</h1>
+
+    <div class="card">
+
+        <select id="location">
+            <option value="">Select Location</option>
+            <option>Classroom</option>
+            <option>Toilet</option>
+            <option>Canteen</option>
+            <option>Library</option>
+            <option>Hall</option>
+            <option>Corridor</option>
+            <option>Staircase</option>
+        </select>
+
+        <textarea
+        id="problem"
+        placeholder="Describe the problem..."
+        ></textarea>
+
+        <button onclick="sendReport()">
+            Report
+        </button>
+
+        <button onclick="goHome()">
+            Back
+        </button>
+
+    </div>
+
+</div>
+
+<!-- CLEANER PAGE -->
+<div id="cleanerPage">
+
+    <h1>Cleaning Tasks</h1>
+
+    <div class="card">
+
+        <div class="report-box" id="taskBox">
+
+            <h3 id="showLocation">
+                No Task
+            </h3>
+
+            <p id="showProblem">
+            </p>
+
+        </div>
+
+        <button onclick="refreshTask()">
+            Refresh
+        </button>
+
+        <button class="done-btn" onclick="completeTask()">
+            Done
+        </button>
+
+        <button onclick="goHome()">
+            Back
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+<script>
+
+function openTeacher(){
+
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("teacherPage").style.display = "block";
+
+}
+
+function openCleaner(){
+
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("cleanerPage").style.display = "block";
+
+}
+
+function goHome(){
+
+    document.getElementById("homePage").style.display = "block";
+
+    document.getElementById("teacherPage").style.display = "none";
+
+    document.getElementById("cleanerPage").style.display = "none";
+
+}
+
+function sendReport(){
+
+    let location =
+    document.getElementById("location").value;
+
+    let problem =
+    document.getElementById("problem").value;
+
+    if(location === "" || problem === ""){
+
+        alert("Please complete the report");
+
+        return;
+    }
+
+    localStorage.setItem("location", location);
+
+    localStorage.setItem("problem", problem);
+
+    alert("Report Submitted Successfully");
+
+    document.getElementById("location").value = "";
+
+    document.getElementById("problem").value = "";
+
+}
+
+function refreshTask(){
+
+    let location =
+    localStorage.getItem("location");
+
+    let problem =
+    localStorage.getItem("problem");
+
+    if(location && problem){
+
+        document.getElementById("showLocation").innerHTML =
+        "Location: " + location;
+
+        document.getElementById("showProblem").innerHTML =
+        "Problem: " + problem;
+
+    }else{
+
+        document.getElementById("showLocation").innerHTML =
+        "No Task Available";
+
+        document.getElementById("showProblem").innerHTML = "";
+
+    }
+
+}
+
+function completeTask(){
+
+    localStorage.removeItem("location");
+
+    localStorage.removeItem("problem");
+
+    alert("Task Completed");
+
+    document.getElementById("showLocation").innerHTML =
+    "No Task Available";
+
+    document.getElementById("showProblem").innerHTML = "";
+
+}
+
+</script>
+
+</body>
+</html>
